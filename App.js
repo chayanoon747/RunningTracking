@@ -1,6 +1,6 @@
-import {SafeAreaProvider} from 'react-native-safe-area-context'
-import {NavigationContainer} from '@react-navigation/native'
 import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native'
+import { SafeAreaProvider } from 'react-native-safe-area-context'
 import { StackNav } from './navigators/StackNav';
 
 export default function App() {
