@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, TextInput, StyleSheet } from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native"
 import { useFonts, Roboto_100Thin, Roboto_500Medium, Roboto_700Bold, Roboto_900Black} from '@expo-google-fonts/roboto';
 import { AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useState } from 'react';
@@ -50,8 +50,8 @@ export const SignInScreen = ({navigation})=>{
                             <TextInput style={isEmailFocused ? styles.inputFocused : styles.input} 
                                 placeholder={isEmailFocused ? '' : 'EMAIL'} 
                                 placeholderTextColor='gray'
-                                placeholderStyle={styles.placeholder}
                                 onFocus={handleEmailFocus}
+                                label='Email'
                             >
                             </TextInput>
                         </View>
@@ -64,7 +64,6 @@ export const SignInScreen = ({navigation})=>{
                             <TextInput style={isPasswordFocused ? styles.inputFocused : styles.input} 
                                 placeholder={isPasswordFocused ? '' : 'PASSWORD'} 
                                 placeholderTextColor='gray'
-                                placeholderStyle={styles.placeholder}
                                 onFocus={handlePasswordFocus}
                             >
                             </TextInput>
@@ -117,9 +116,4 @@ const styles = StyleSheet.create({
         borderColor: 'blue',
         marginVertical:'3%',
     },
-    placeholder: {
-        fontFamily: 'Roboto_700Bold', 
-        color:'gray', 
-        fontSize:20
-    }
   });
