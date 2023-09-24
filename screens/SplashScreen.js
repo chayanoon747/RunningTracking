@@ -4,8 +4,8 @@ import {useEffect} from 'react'
 export const SplashScreen = ({navigation})=>{
     useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('BottomTabNav')
-      navigation.reset({index:0,routes:[{name:'BottomTabNav'}]})
+      navigation.navigate('SignInScreen')
+      navigation.reset({index:0,routes:[{name:'SignInScreen'}]})
     },2000)
   })
   return(

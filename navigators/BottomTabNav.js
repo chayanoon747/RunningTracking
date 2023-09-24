@@ -8,15 +8,15 @@ export const BottomTabNav = ()=>{
     const BottomTab = createBottomTabNavigator()
     return (
         <BottomTab.Navigator 
-            initialRouteName='Run'
+            initialRouteName='RunScreen'
             screenOptions={{
                 tabBarActiveTintColor:'blue',
                 tabBarInactiveTintColor:'gray',
             }}
             >
-          <BottomTab.Screen name="Home" component={HomeScreen} 
+          <BottomTab.Screen name="HomeScreen" component={HomeScreen} 
             options={{
-                title:'Home',
+                title:'HomeScreen',
                 tabBarIcon:({focused, color, size})=>{
                     return(
                       <Ionicons name={focused ? 'home':'home-outline'} color={color} size={size}/>
@@ -24,9 +24,9 @@ export const BottomTabNav = ()=>{
                   },
             }}
           />
-          <BottomTab.Screen name="Run" component={RunScreen} 
+          <BottomTab.Screen name="RunScreen" component={RunScreen} 
             options={{
-                title:'Run',
+                title:'RunScreen',
                 tabBarIcon:({focused, color, size})=>{
                     if(focused){
                         return(
@@ -42,9 +42,9 @@ export const BottomTabNav = ()=>{
                 
             }}
           />
-          <BottomTab.Screen name="Record" component={RecordScreen} 
+          <BottomTab.Screen name="RecordScreen" component={RecordScreen} 
             options={{
-                title:'Record',
+                title:'RecordScreen',
                 tabBarIcon:({focused, color, size})=>{
                     return(
                       <MaterialCommunityIcons name={focused ? 'record-circle':'record-circle-outline'} color={color} size={size}/>
