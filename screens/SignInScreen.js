@@ -64,6 +64,7 @@ export const SignInScreen = ({navigation})=>{
                             <TextInput style={isPasswordFocused ? styles.inputFocused : styles.input} 
                                 placeholder={isPasswordFocused ? '' : 'PASSWORD'} 
                                 placeholderTextColor='gray'
+                                secureTextEntry={true}
                                 onFocus={handlePasswordFocus}
                             >
                             </TextInput>
@@ -95,7 +96,11 @@ export const SignInScreen = ({navigation})=>{
             </View>
             <View style={{flex:1, flexDirection:'row',borderWidth:2, borderColor:'blue', justifyContent:'center', alignItems:'flex-end'}}>
                 <Text style={{fontFamily: 'Roboto_700Bold', color:'gray'}}>Don't have an account?</Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={()=>{
+                        navigation.navigate('SignUpScreen')
+                    }}
+                >
                     <Text style={{fontFamily: 'Roboto_900Black', color:'orange'}}> Sign Up</Text>
                 </TouchableOpacity>
             </View>

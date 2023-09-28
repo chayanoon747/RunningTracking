@@ -2,6 +2,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack'
 import { SplashScreen } from '../screens/SplashScreen'
 import { BottomTabNav } from './BottomTabNav'
 import { SignInScreen } from '../screens/SignInScreen'
+import { SignUpScreen } from '../screens/SignUpScreen'
 
 export const StackNav = ()=>{
   const Stack = createNativeStackNavigator()
@@ -19,6 +20,12 @@ export const StackNav = ()=>{
       <Stack.Screen
         name='SignInScreen'
         component={SignInScreen}
+        options={{ headerShown: false }}
+      />
+
+      <Stack.Screen
+        name='SignUpScreen'
+        component={SignUpScreen}
         options={{ headerShown: false }}
       />
 
