@@ -117,14 +117,14 @@ export const SignUpScreen = ({navigation})=>{
                         <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
                             <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
                         </View>
-                        <TouchableOpacity style={{flex:1, alignItems:'center',borderColor:'black',borderWidth:3, marginHorizontal:'4%', marginVertical:'1%', borderRadius:20}}>
-                            <Image source={appleIcon} style={{flex:1, resizeMode:'center'}}></Image>
+                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center',borderColor:'#F0F0F0',borderWidth:3, marginHorizontal:'4%', marginVertical:'1%', borderRadius:20}}>
+                            <Image source={appleIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
                         </TouchableOpacity>
                         <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
                             <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
                         </View>
-                        <TouchableOpacity style={{flex:1, alignItems:'center',borderColor:'black',borderWidth:3, marginHorizontal:'4%', marginVertical:'1%', borderRadius:20}}>
-                            <Image source={facebookIcon} style={{flex:1, resizeMode:'center'}}></Image>
+                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center',borderColor:'#F0F0F0',borderWidth:3, marginHorizontal:'4%', marginVertical:'1%', borderRadius:20}}>
+                            <Image source={facebookIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
                         </TouchableOpacity>  
                     </View>
                 </View>
