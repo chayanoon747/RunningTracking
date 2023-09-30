@@ -10,7 +10,7 @@ export const RunScreen = () => {
     const [iconName, setIconName] = useState('play-circle');
     //ตั้งเป็น true ไว้เพราะแค่จะ test UI เฉยๆ
     //ถ้าต้องการดึง google map ให้ตั้งเป็น false
-    const [location, setLocation] = useState(true);
+    const [location, setLocation] = useState(false);
     const [isMapViewExpanded, setIsMapViewExpanded] = useState(true);
   
 
@@ -30,7 +30,6 @@ export const RunScreen = () => {
                         setIsMapViewExpanded(!isMapViewExpanded)
                     }}
                 >
-                    {/*
                     <MapView
                         style={{ flex:1 }} // กำหนดความกว้างและความสูงให้เท่ากับขนาดหน้าจอ
                         initialRegion={{
@@ -51,14 +50,16 @@ export const RunScreen = () => {
                             description="คุณอยู่ที่นี่"
                         />
                     </MapView>
-                    */}
                 </TouchableOpacity>
             )
         }else{
             return(
-                <View style={{flex:1}}>
-                    
-                    {/*<MapView
+                <View style={{flex:1}} 
+                    onPress={()=>{
+                        setIsMapViewExpanded(!isMapViewExpanded)
+                    }}
+                >
+                    <MapView
                         style={{ flex:1 }} // กำหนดความกว้างและความสูงให้เท่ากับขนาดหน้าจอ
                         initialRegion={{
                             latitude: location.coords.latitude,
@@ -66,21 +67,20 @@ export const RunScreen = () => {
                             latitudeDelta: 0.0922,
                             longitudeDelta: 0.0421,
                         }}
-                        zoomEnabled={true} 
+                        zoomEnabled={true} // ปิดการขยายแผนที่
                         scrollEnabled={true}
-                    >*/}
-                    <View style={{flex:1}}>
+                    >
                         <TouchableOpacity
                             style={{flex:1, position: 'absolute',bottom: 0,right: 0,backgroundColor: 'transparent',
-                                    borderRadius: 20,padding: 20,
-                            }}
+                                    borderRadius: 20,padding: 20}}
                             onPress={() => {
                                 setIsMapViewExpanded(!isMapViewExpanded)
                             }}
                         >
                             <AntDesign name="closecircleo" size={60} color="black" />
                         </TouchableOpacity>
-                        {/*<Marker
+
+                        <Marker
                             coordinate={{
                             latitude: location.coords.latitude,
                             longitude: location.coords.longitude,
@@ -88,15 +88,12 @@ export const RunScreen = () => {
                             title="ตำแหน่งปัจจุบัน"
                             description="คุณอยู่ที่นี่"
                         />
-                        */}
-                    </View>
-                    {/*</MapView>*/}
-                
+                    </MapView>
                 </View>
             )
         }
     }
-    /*
+    
     useEffect(() => {
         getLocation();
     }, []);
@@ -115,11 +112,11 @@ export const RunScreen = () => {
         console.error(error);
         }
     };
-    */
+    
     return (
         <View style={{ flex: 1 }}>
         <View style={{ flex:1, borderWidth: 3, borderColor: 'red' }}>
-            {/*
+            
             {location ? (
                 <Text style={{ fontSize: 16 }}>
                 Latitude: {location.coords.latitude}, Longitude: {location.coords.longitude}
@@ -127,7 +124,7 @@ export const RunScreen = () => {
             ) : (
                 <Text style={{ fontSize: 16 }}>กำลังดึงตำแหน่ง...</Text>
             )}
-            */}
+            
         
             {location && (
                 MapViewExpanded()
