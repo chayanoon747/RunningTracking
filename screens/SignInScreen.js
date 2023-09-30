@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity, StyleSheet, TextInput } from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native"
+import { TextInput } from "react-native-paper";
 import { useFonts, Roboto_100Thin, Roboto_500Medium, Roboto_700Bold, Roboto_900Black} from '@expo-google-fonts/roboto';
 import { AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useState } from 'react';
@@ -17,7 +18,7 @@ export const SignInScreen = ({navigation})=>{
     });
 
     if (!fontsLoaded) {
-        return null; // รอให้ font โหลดเสร็จก่อนแสดงหน้าจอ
+        return null; 
     }
 
     const handleEmailFocus = () => {
@@ -30,6 +31,11 @@ export const SignInScreen = ({navigation})=>{
         setIsPasswordFocused(true); 
     };
     
+    const handleTextInputBlur = () => {
+        setIsEmailFocused(false);
+        setIsPasswordFocused(false); 
+    };
+
     return(
         <SafeAreaView style={{flex:1}}>
             <View style={{flex:1, borderWidth:2, borderColor:'red'}}>
@@ -43,32 +49,25 @@ export const SignInScreen = ({navigation})=>{
                 </View>
 
                 <View style={{flex:2, borderWidth:2, borderColor:'purple'}}>
-                    <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
-                        <MaterialCommunityIcons name={isEmailFocused ? 'email-open-outline' : 'email-outline'} size={24} color="black" style={{paddingHorizontal:10, paddingTop:15}}/>
-                        <View style={{flex:1}}>
-                            <Text style={{flex:0.3, fontFamily: 'Roboto_700Bold', color:'gray', fontSize:12}}>{isEmailFocused ? 'EMAIL' : ''}</Text>
-                            <TextInput style={isEmailFocused ? styles.inputFocused : styles.input} 
-                                placeholder={isEmailFocused ? '' : 'EMAIL'} 
-                                placeholderTextColor='gray'
-                                onFocus={handleEmailFocus}
-                                label='Email'
-                            >
-                            </TextInput>
-                        </View>
+                    <View style={{flex:1, flexDirection:'row', alignItems:'center', marginRight:20}}>
+                        <MaterialCommunityIcons name={isEmailFocused ? 'email-open-outline' : 'email-outline'} size={24} color="black" style={{paddingHorizontal:10}}/>
+                        <TextInput style={styles.textinput} 
+                            label='EMAIL'
+                            onFocus={handleEmailFocus}
+                            onBlur={handleTextInputBlur}
+                            
+                        >
+                        </TextInput>
                     </View>
                     
-                    <View style={{flex:1, flexDirection:'row', alignItems:'center'}}>
-                        <Feather name={isPasswordFocused ? 'unlock' : 'lock'} size={24} color="black" style={{paddingHorizontal:10, paddingTop:15}}/>
-                        <View style={{flex:1}}>
-                            <Text style={{flex:0.3, fontFamily: 'Roboto_700Bold', color:'gray', fontSize:12}}>{isPasswordFocused ? 'PASSWORD' : ''}</Text>
-                            <TextInput style={isPasswordFocused ? styles.inputFocused : styles.input} 
-                                placeholder={isPasswordFocused ? '' : 'PASSWORD'} 
-                                placeholderTextColor='gray'
-                                secureTextEntry={true}
-                                onFocus={handlePasswordFocus}
-                            >
-                            </TextInput>
-                        </View>
+                    <View style={{flex:1, flexDirection:'row', alignItems:'center', marginRight:20}}>
+                        <Feather name={isPasswordFocused ? 'unlock' : 'lock'} size={24} color="black" style={{paddingHorizontal:10}}/>
+                        <TextInput style={styles.textinput} 
+                            label='PASSWORD'
+                            onFocus={handlePasswordFocus}
+                            onBlur={handleTextInputBlur}   
+                        >
+                        </TextInput>
                     </View>
                     
                     
@@ -109,16 +108,11 @@ export const SignInScreen = ({navigation})=>{
 }
 
 const styles = StyleSheet.create({
-    input: {
-        flex:0.5,
-        borderBottomWidth: 2,
-        borderColor: 'gray',
-        marginVertical:'3%'
-    },
-    inputFocused: {
-        flex:0.5,
-        borderBottomWidth: 2,
-        borderColor: 'blue',
-        marginVertical:'3%',
+    textinput: {
+        flex:1,
+        borderRadius:20,
+        borderTopRightRadius:20,
+        borderTopLeftRadius:20,
+        backgroundColor:'#F0F0F0',
     },
   });
