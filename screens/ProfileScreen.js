@@ -3,11 +3,16 @@ import { useFonts, Roboto_100Thin, Roboto_500Medium, Roboto_700Bold, Roboto_900B
 import { TextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EditComp } from "../components/EditComp";
+import { useState } from "react";
 
 export const ProfileScreen = ({navigation})=>{
 
     const { width, height } = Dimensions.get('window');
-    
+    const [firstName, setFirstName] = useState('Chayanon');
+    const [lastName, setLastName] = useState('Pissanuwattanasak');
+    const firstNameUpper = firstName.toUpperCase()
+    const lastNameUpper = lastName.toUpperCase()
+
     const [fontsLoaded] = useFonts({
         Roboto_100Thin,
         Roboto_500Medium,
@@ -30,29 +35,27 @@ export const ProfileScreen = ({navigation})=>{
                             </View>
                         </View>
                         <View style={{flex:0.4, marginHorizontal:'25%'}}>
-                            <Text style={{fontFamily:'Roboto_900Black',textAlign:'center', color:'white', fontWeight:'bold', fontSize:16}}>CHAYANON </Text>
-                            <Text style={{fontFamily:'Roboto_900Black',textAlign:'center', color:'white', fontWeight:'bold', fontSize:16}}>PISSANUWATTANASAK</Text>
+                            <Text style={{fontFamily:'Roboto_900Black',textAlign:'center', color:'white', fontWeight:'bold', fontSize:16}}>{firstNameUpper}</Text>
+                            <Text style={{fontFamily:'Roboto_900Black',textAlign:'center', color:'white', fontWeight:'bold', fontSize:16}}>{lastNameUpper}</Text>
                         </View>
                     </View>
                 </View>
-                <View style={{flex:1, marginTop:10}}>
+                <View style={{flex:1}}>
                     <View style={{flex:3}}>
-                        <View style={{flex:1, margin:10}}>
-                            <EditComp value="chayanon pissanuwattanasak"/>
+                        <View style={{flex:1, marginTop:10, marginHorizontal:25}}>
+                            <EditComp value={firstName}/>
+                            <EditComp value={lastName}/>
                             <EditComp value="chayanon.pi@ku.th"/>
-                            <EditComp value="0816538747"/>
-                        
-                            
                         </View>
                         
                     </View>
-                    <View style={{flex:0.9}}>
-                        <TouchableOpacity style={{flex:1, backgroundColor:'#DC143C', justifyContent:'center', borderRadius:20, marginVertical:10, marginHorizontal:30}}
+                    <View style={{flex:1, paddingBottom:8}}>
+                        <TouchableOpacity style={{flex:1, backgroundColor:'#DC143C', justifyContent:'center', borderRadius:20, marginVertical:12, marginHorizontal:25}}
                             onPress={()=>{
                                 navigation.navigate('SignInScreen')
                             }}
                         >
-                            <Text style={{fontFamily:'Roboto_900Black', textAlign:'center', color:'white'}}>SIGN OUT</Text>
+                            <Text style={{fontFamily:'Roboto_900Black', textAlign:'center', color:'white', fontSize:16}}>SIGN OUT</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
