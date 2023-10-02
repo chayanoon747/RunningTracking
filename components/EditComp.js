@@ -18,7 +18,7 @@ export const EditComp = (props)=>{
 
     return(
         <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-            <TextInput style={{flex:1, backgroundColor:'white', borderWidth:3, borderColor:'black', marginRight:5}}
+            <TextInput style={{flex:1, backgroundColor:'white', borderWidth:3, borderColor:editValue ? 'red' : 'black', marginRight:5}}
                 editable={editValue} 
                 value={textValue} 
                 onChangeText={handleTextChange}
