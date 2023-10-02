@@ -11,6 +11,49 @@ export const TrackingComp = () => {
 
     let subscription = null;
 
+    const haversine = (lat1, lon1, lat2, lon2) => {
+        const deg2rad = (deg) => {
+            return deg * (Math.PI / 180);
+        };
+
+        const R = 6371; // รัศมีของโลกในหน่วยกิโลเมตร
+        const dLat = deg2rad(lat2 - lat1);
+        const dLon = deg2rad(lon2 - lon1);
+
+        const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        const distance = R * c; // ระยะทางระหว่างจุดทั้งสองในหน่วยกิโลเมตร
+        return distance;
+    };
+
+    const calculateTotalDistance = () => {
+        let totalDistance = 0;
+        for (let i = 1; i < coordinates.length; i++) {
+            const prevCoordinate = coordinates[i - 1];
+            const currentCoordinate = coordinates[i];
+            totalDistance += haversine(
+                prevCoordinate.latitude,
+                prevCoordinate.longitude,
+                currentCoordinate.latitude,
+                currentCoordinate.longitude
+            );
+        }
+        return totalDistance;
+    };
+
+    const calculatePace = () => {
+        if (coordinates.length < 2) {
+            return 0; // ไม่สามารถคำนวณ Pace ได้เมื่อมีน้อยกว่า 2 จุดตำแหน่ง
+        }
+
+        const totalDistance = calculateTotalDistance(); // ระยะทางรวมในหน่วยกิโลเมตร
+        const totalTimeInMinutes = (coordinates.length - 1) * 10 / 60; // หน่วยเวลาในนาที
+
+        return totalDistance / totalTimeInMinutes;
+    };
+
     const startTracking = async () => {
         setIsTracking(true);
 
@@ -108,6 +151,8 @@ export const TrackingComp = () => {
                 onPress={isTracking ? stopTracking : startTracking}
                 disabled={!location} // ปิดการใช้งานปุ่มเริ่ม/หยุด ถ้าไม่มีข้อมูลตำแหน่ง
             />
+            <Text>ระยะทางรวม: {calculateTotalDistance().toFixed(2)} กิโลเมตร</Text>
+            <Text>Pace: {calculatePace().toFixed(2)} นาที/กิโลเมตร</Text>
         </View>
     );
 };

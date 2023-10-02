@@ -55,7 +55,7 @@ export const SignInScreen = ({navigation})=>{
                             label='EMAIL'
                             onFocus={handleEmailFocus}
                             onBlur={handleTextInputBlur}
-                            
+                            activeUnderlineColor='black'
                         >
                         </TextInput>
                     </View>
@@ -66,6 +66,7 @@ export const SignInScreen = ({navigation})=>{
                             label='PASSWORD'
                             onFocus={handlePasswordFocus}
                             onBlur={handleTextInputBlur}   
+                            activeUnderlineColor='black'
                         >
                         </TextInput>
                     </View>

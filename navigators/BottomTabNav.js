@@ -1,16 +1,21 @@
+import { Image, View } from "react-native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from '../screens/HomeScreen';
 import { RunScreen } from '../screens/RunScreen';
 import { RecordScreen } from '../screens/RecordScreen';
+import { ProfileScreen } from '../screens/ProfileScreen';
 import {Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons} from '@expo/vector-icons'
 
 export const BottomTabNav = ()=>{
     const BottomTab = createBottomTabNavigator()
+    const userIcon = require('../assets/user.png')
+    const userOutlineIcon = require('../assets/user_outline.png')
+
     return (
         <BottomTab.Navigator 
             initialRouteName='RunScreen'
             screenOptions={{
-                tabBarActiveTintColor:'blue',
+                tabBarActiveTintColor:'purple',
                 tabBarInactiveTintColor:'gray',
             }}
             >
@@ -47,11 +52,22 @@ export const BottomTabNav = ()=>{
                 title:'RecordScreen',
                 tabBarIcon:({focused, color, size})=>{
                     return(
-                      <MaterialCommunityIcons name={focused ? 'record-circle':'record-circle-outline'} color={color} size={size}/>
+                      <MaterialCommunityIcons name={focused ? 'record-circle':'record-circle-outline'} size={size} color={color}/>
+                    )
+                  },
+            }}
+          />
+          <BottomTab.Screen name="ProfileScreen" component={ProfileScreen} 
+            options={{
+                title:'ProfileScreen',
+                tabBarIcon:({focused, color, size})=>{
+                    return(
+                      <FontAwesome name={focused ? 'user-circle':'user-circle-o'} size={size} color={color} />
                     )
                   },
             }}
           />
         </BottomTab.Navigator>
+        
       );
 }
