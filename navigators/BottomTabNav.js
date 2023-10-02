@@ -1,4 +1,4 @@
-import { Image, View } from "react-native"
+import { Image, View, Text } from "react-native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from '../screens/HomeScreen';
 import { RunScreen } from '../screens/RunScreen';
@@ -8,14 +8,11 @@ import {Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons} from '@expo
 
 export const BottomTabNav = ()=>{
     const BottomTab = createBottomTabNavigator()
-    const userIcon = require('../assets/user.png')
-    const userOutlineIcon = require('../assets/user_outline.png')
-
     return (
         <BottomTab.Navigator 
             initialRouteName='RunScreen'
             screenOptions={{
-                tabBarActiveTintColor:'purple',
+                tabBarActiveTintColor:'black',
                 tabBarInactiveTintColor:'gray',
             }}
             >
@@ -26,7 +23,12 @@ export const BottomTabNav = ()=>{
                     return(
                       <Ionicons name={focused ? 'home':'home-outline'} color={color} size={size}/>
                     )
-                  },
+                },
+                tabBarLabel:({focused, color, size})=>{
+                  return(
+                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>HomeScreen</Text>
+                  )
+                },
             }}
           />
           <BottomTab.Screen name="RunScreen" component={RunScreen} 
@@ -44,7 +46,11 @@ export const BottomTabNav = ()=>{
                         )
                     }
                 },
-                
+                tabBarLabel:({focused, color, size})=>{
+                  return(
+                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>HomeScreen</Text>
+                  )
+                },
             }}
           />
           <BottomTab.Screen name="RecordScreen" component={RecordScreen} 
@@ -54,7 +60,12 @@ export const BottomTabNav = ()=>{
                     return(
                       <MaterialCommunityIcons name={focused ? 'record-circle':'record-circle-outline'} size={size} color={color}/>
                     )
-                  },
+                },
+                tabBarLabel:({focused, color, size})=>{
+                  return(
+                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>HomeScreen</Text>
+                  )
+                },
             }}
           />
           <BottomTab.Screen name="ProfileScreen" component={ProfileScreen} 
@@ -64,7 +75,12 @@ export const BottomTabNav = ()=>{
                     return(
                       <FontAwesome name={focused ? 'user-circle':'user-circle-o'} size={size} color={color} />
                     )
-                  },
+                },
+                tabBarLabel:({focused, color, size})=>{
+                  return(
+                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>HomeScreen</Text>
+                  )
+                },
             }}
           />
         </BottomTab.Navigator>

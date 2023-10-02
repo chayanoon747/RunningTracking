@@ -91,7 +91,7 @@ export const SignUpScreen = ({navigation})=>{
                 <View style={{flex:1, padding:10}}>
                     <View style={{flex:1, flexDirection:'row', alignItems:'center', marginBottom:10}}>  
                         <View style={{flex:1}}>
-                            <TouchableOpacity style={{backgroundColor:'yellow', width:30, borderTopRightRadius:10, borderBottomLeftRadius:10}}
+                            <TouchableOpacity style={{backgroundColor:'white', width:30, borderTopRightRadius:10, borderBottomLeftRadius:10}}
                                 onPress={()=>{
                                     navigation.goBack()
                                 }}
@@ -113,7 +113,7 @@ export const SignUpScreen = ({navigation})=>{
                 </View>
             </View>
 
-            <View style={{flex:3, borderTopLeftRadius:50, borderTopRightRadius:50, backgroundColor:'white'}}>
+            <View style={{flex:3, borderTopLeftRadius:60, borderTopRightRadius:60, backgroundColor:'white'}}>
                 <View style={{flex:1, paddingHorizontal:'5%', paddingTop:'5%', paddingBottom:'2%'}}>
                             
                     <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
@@ -162,10 +162,10 @@ export const SignUpScreen = ({navigation})=>{
                     <View style={{flex:0.5}}></View>
                     
                     <TouchableOpacity 
-                        style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:'yellow', borderRadius:20, borderWidth:3, borderColor:'black'}}
+                        style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:'black', borderRadius:20, borderWidth:3, borderColor:'black'}}
                         onPress={handleSignUp}
                     >
-                        <Text style={{color:'black', fontFamily: 'Roboto_900Black', fontWeight:'bold', fontSize:18}}>SIGN UP</Text>
+                        <Text style={{color:'white', fontFamily: 'Roboto_900Black', fontWeight:'bold', fontSize:18}}>SIGN UP</Text>
                     </TouchableOpacity>
 
                     <View style={{flex:1.3, flexDirection:'row', paddingTop:'3%'}}>
