@@ -4,6 +4,7 @@ import { TextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EditComp } from "../components/EditComp";
 import { useState } from "react";
+import * as ImagePicker from 'expo-image-picker';
 
 export const ProfileScreen = ({navigation})=>{
 
@@ -12,6 +13,22 @@ export const ProfileScreen = ({navigation})=>{
     const [lastName, setLastName] = useState('Pissanuwattanasak');
     const firstNameUpper = firstName.toUpperCase()
     const lastNameUpper = lastName.toUpperCase()
+    const [selectedImage, setSelectedImage] = useState(null);
+
+    const selectImage = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            alert('Permission to access media library is required!');
+            return;
+        }
+
+        const result = await ImagePicker.launchImageLibraryAsync();
+    
+        if (!result.canceled) {
+            const selectedImage = result.assets[0];
+            setSelectedImage({ uri: selectedImage.uri });
+        }
+    };
 
     const [fontsLoaded] = useFonts({
         Roboto_100Thin,
@@ -30,9 +47,13 @@ export const ProfileScreen = ({navigation})=>{
                 <View style={{flex:1, alignItems:'center'}}>
                     <View style={{width: width*1.5, height: height/2.5, backgroundColor: 'black', borderBottomLeftRadius: 300, borderBottomRightRadius: 300}}>
                         <View style={{flex:1, justifyContent:'flex-end', marginBottom:20}}>
-                            <View style={{width:150,height:150, borderWidth:3, borderColor:'white', position:'absolute',left:'50%', borderRadius:100,
-                                        marginLeft: -75,marginBottom: -75}}> 
-                            </View>
+                            <TouchableOpacity style={{width:150,height:150, borderWidth:3, borderColor:'white', position:'absolute',left:'50%', borderRadius:100,
+                                        marginLeft: -75,marginBottom: -75}}
+                                onPress={selectImage}
+                            > 
+                                {selectedImage ? (<Image source={{uri:selectedImage.uri}}
+                                                        style={{ width: 144, height: 144, borderRadius: 72 }}/>) : null}
+                            </TouchableOpacity>
                         </View>
                         <View style={{flex:0.4, marginHorizontal:'25%'}}>
                             <Text style={{fontFamily:'Roboto_900Black',textAlign:'center', color:'white', fontWeight:'bold', fontSize:16}}>{firstNameUpper}</Text>

@@ -2,7 +2,7 @@ import { Image, View, Text } from "react-native"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { HomeScreen } from '../screens/HomeScreen';
 import { RunScreen } from '../screens/RunScreen';
-import { RecordScreen } from '../screens/RecordScreen';
+import { StatScreen } from "../screens/StatScreen";
 import { ProfileScreen } from '../screens/ProfileScreen';
 import {Ionicons, FontAwesome, FontAwesome5, MaterialCommunityIcons} from '@expo/vector-icons'
 
@@ -18,22 +18,22 @@ export const BottomTabNav = ()=>{
             >
           <BottomTab.Screen name="HomeScreen" component={HomeScreen} 
             options={{
-                title:'HomeScreen',
+                title:'CHALLENGE',
                 tabBarIcon:({focused, color, size})=>{
                     return(
-                      <Ionicons name={focused ? 'home':'home-outline'} color={color} size={size}/>
+                      <MaterialCommunityIcons name={focused ? 'fire-circle':'fire'} color={color} size={size}/>
                     )
                 },
                 tabBarLabel:({focused, color, size})=>{
                   return(
-                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>HomeScreen</Text>
+                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>CHALLENGE</Text>
                   )
                 },
             }}
           />
           <BottomTab.Screen name="RunScreen" component={RunScreen} 
             options={{
-                title:'RunScreen',
+                title:'RUNNING',
                 tabBarIcon:({focused, color, size})=>{
                     if(focused){
                         return(
@@ -48,29 +48,29 @@ export const BottomTabNav = ()=>{
                 },
                 tabBarLabel:({focused, color, size})=>{
                   return(
-                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>HomeScreen</Text>
+                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>RUNNING</Text>
                   )
                 },
             }}
           />
-          <BottomTab.Screen name="RecordScreen" component={RecordScreen} 
+          <BottomTab.Screen name="StatScreen" component={StatScreen} 
             options={{
-                title:'RecordScreen',
+                title:'STATISTICS',
                 tabBarIcon:({focused, color, size})=>{
                     return(
-                      <MaterialCommunityIcons name={focused ? 'record-circle':'record-circle-outline'} size={size} color={color}/>
+                      <Ionicons name={focused ? 'bar-chart':'bar-chart-outline'} size={size} color={color}/>
                     )
                 },
                 tabBarLabel:({focused, color, size})=>{
                   return(
-                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>HomeScreen</Text>
+                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>STATISTICS</Text>
                   )
                 },
             }}
           />
           <BottomTab.Screen name="ProfileScreen" component={ProfileScreen} 
             options={{
-                title:'ProfileScreen',
+                title:'PROFILE',
                 tabBarIcon:({focused, color, size})=>{
                     return(
                       <FontAwesome name={focused ? 'user-circle':'user-circle-o'} size={size} color={color} />
@@ -78,7 +78,7 @@ export const BottomTabNav = ()=>{
                 },
                 tabBarLabel:({focused, color, size})=>{
                   return(
-                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>HomeScreen</Text>
+                    <Text style={{ fontWeight: focused ? 'bold' : 'normal', fontSize:10}} color={color} size={size}>PROFILE</Text>
                   )
                 },
             }}
