@@ -1,18 +1,17 @@
-import { View, Text, TouchableOpacity, StyleSheet, Image} from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet, Image, Alert, ScrollView} from "react-native"
 import { TextInput} from "react-native-paper";
 import { AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RunningAnimated } from "../components/animations/RunningAnimated";
 import { useState } from "react";
 import { useFonts, Roboto_100Thin, Roboto_500Medium, Roboto_700Bold, Roboto_900Black} from '@expo-google-fonts/roboto';
+import { signUpEmailPass} from '../firebase/AuthModel'
 
 const images = [require('../assets/RunningMan_1.png'), require('../assets/RunningMan_2.png'),
                 require('../assets/RunningMan_3.png'), require('../assets/RunningMan_4.png')];
 
 export const SignUpScreen = ({navigation})=>{
-    const [fullname, setFullName] = useState();
-    const [email, setEmail] = useState();
-    const [password, setPassword] = useState();
+    const [profile, setProfile] = useState({'fullname':'','email':'','password':''})
     const [fullnameValid, setFullNameValid] = useState(true);
     const [emailValid, setEmailValid] = useState(true);
     const [passwordValid, setPasswordValid] = useState(true);
@@ -33,31 +32,62 @@ export const SignUpScreen = ({navigation})=>{
         return null; 
     }
 
-    const handleSignUp = () => {
+    const setFullName = (text) => {
+        setProfile(oldValue => ({
+          ...oldValue,
+          fullname:text
+        }))
+    }
+
+    const setEmail = (text) => {
+        setProfile(oldValue => ({
+          ...oldValue,
+          email:text
+        }))
+    }
+
+    const setPassword = (text) => {
+        setProfile(oldValue => ({
+          ...oldValue,
+          password:text
+        }))
+    }
+
+    const success = (doc) => {
+        Alert.alert(`${doc.fullname} has been added to system`)
+        navigation.goBack()
+    }
+
+    const unsuccess = (msg) => {
+        console.log(msg)
+        Alert.alert(msg)
+    }
+
+    const handleSignUp = async() => {
         setEventTextInput(1)
-        if(!fullname){
+        if(!profile.fullname){
            setFullNameValid(false)
         }else{
             setFullNameValid(true)
         }
 
-        if(!email){
+        if(!profile.email){
             setEmailValid(false)
         }else{
             setEmailValid(true)
         }
 
-        if(!password){
+        if(!profile.password){
             setPasswordValid(false)
         }else{
             setPasswordValid(true)  
         }
 
-        if(fullname && email && password){
-            console.log("Signed up successful!!")
-        }else{
-            console.log("Signed up unsuccessful!!")
-        }
+        if (profile.fullname && profile.email && profile.password) {
+            signUpEmailPass(profile, success, unsuccess)
+          } else {
+            console.log("Signed up unsuccessful!!");
+          }
     };
 
     const handleColor = (name, event)=>{
@@ -68,19 +98,19 @@ export const SignUpScreen = ({navigation})=>{
             
         }else{ 
             if(name == 'fullname'){
-                if(event == 'iconColor') return fullname? 'black':'red';
-                if(event == 'borderColor') return fullname? 'transparent':'red';
-                if(event == 'borderWidth') return fullname? 0:2;
+                if(event == 'iconColor') return profile.fullname? 'black':'red';
+                if(event == 'borderColor') return profile.fullname? 'transparent':'red';
+                if(event == 'borderWidth') return profile.fullname? 0:2;
             }
             if(name == 'email'){
-                if(event == 'iconColor') return email ? 'black':'red';
-                if(event == 'borderColor') return email ? 'transparent':'red';
-                if(event == 'borderWidth') return email ? 0:2;
+                if(event == 'iconColor') return profile.email ? 'black':'red';
+                if(event == 'borderColor') return profile.email ? 'transparent':'red';
+                if(event == 'borderWidth') return profile.email ? 0:2;
             }
             if(name == 'password'){
-                if(event == 'iconColor') return password ? 'black':'red';
-                if(event == 'borderColor') return password ? 'transparent':'red';
-                if(event == 'borderWidth') return password ? 0:2;
+                if(event == 'iconColor') return profile.password ? 'black':'red';
+                if(event == 'borderColor') return profile.password ? 'transparent':'red';
+                if(event == 'borderWidth') return profile.password ? 0:2;
             }
         }
     }
@@ -113,12 +143,12 @@ export const SignUpScreen = ({navigation})=>{
                 </View>
             </View>
 
-            <View style={{flex:3, borderTopLeftRadius:60, borderTopRightRadius:60, backgroundColor:'white'}}>
-                <View style={{flex:1, paddingHorizontal:'5%', paddingTop:'5%', paddingBottom:'2%'}}>
+            <View style={{flex:3, borderTopLeftRadius:60, borderTopRightRadius:60, backgroundColor:'white', borderWidth:3, borderColor:'green'}}>
+                <View style={{flex:1, marginHorizontal:'5%', marginTop:'5%', marginBottom:'2%', borderWidth:3, borderColor:'red'}}>
                             
                     <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
                         <AntDesign name="user" size={24} color={handleColor('fullname','iconColor')} style={{paddingRight:10}}/>
-                        <TextInput label="FULLNAME" value={fullname} onChangeText={text => setFullName(text)} 
+                        <TextInput label="FULLNAME" value={profile.fullname} onChangeText={text => setFullName(text)} 
                             style={[styles.textinput,{borderColor: handleColor('fullname','borderColor'), borderWidth: handleColor('fullname','borderWidth')}]} 
                             underlineColor="transparent"
                             textColor='black'
@@ -131,7 +161,7 @@ export const SignUpScreen = ({navigation})=>{
 
                     <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
                         <MaterialCommunityIcons name="email-outline" size={24} color={handleColor('email','iconColor')} style={{paddingRight:10}}/>
-                        <TextInput label="EMAIL" value={email} onChangeText={text => setEmail(text)} 
+                        <TextInput label="EMAIL" value={profile.email} onChangeText={text => setEmail(text)} 
                             style={[styles.textinput,{borderColor: handleColor('email','borderColor'), borderWidth: handleColor('email','borderWidth')}]} 
                             underlineColor="transparent"
                             textColor='black'
@@ -143,7 +173,7 @@ export const SignUpScreen = ({navigation})=>{
 
                     <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
                         <Feather name="lock" size={24} color={handleColor('password','iconColor')} style={{paddingRight:10}}/>
-                        <TextInput label="PASSWORD" value={password} onChangeText={text => setPassword(text)} 
+                        <TextInput label="PASSWORD" value={profile.password} onChangeText={text => setPassword(text)} 
                             style={[styles.textinput,{borderColor: handleColor('password','borderColor'), borderWidth: handleColor('password','borderWidth')}]} 
                             underlineColor="transparent"
                             textColor='black'
@@ -154,34 +184,29 @@ export const SignUpScreen = ({navigation})=>{
                         </TextInput>
                     </View>
                     
-                    
-                    
-                    <TouchableOpacity style={{flex:0.5, alignItems:'flex-end'}}>
-                        <Text>Forgot Password?</Text>
-                    </TouchableOpacity>
                     <View style={{flex:0.5}}></View>
                     
                     <TouchableOpacity 
-                        style={{flex:1, justifyContent:'center', alignItems:'center', backgroundColor:'black', borderRadius:20, borderWidth:3, borderColor:'black'}}
+                        style={{flex:0.8, justifyContent:'center', alignItems:'center', backgroundColor:'black', borderRadius:20, borderWidth:3, borderColor:'black'}}
                         onPress={handleSignUp}
                     >
                         <Text style={{color:'white', fontFamily: 'Roboto_900Black', fontWeight:'bold', fontSize:18}}>SIGN UP</Text>
                     </TouchableOpacity>
 
-                    <View style={{flex:1.3, flexDirection:'row', paddingTop:'3%'}}>
-                        <TouchableOpacity style={{flex:1, alignItems:'center',borderColor:'black',borderWidth:3, marginHorizontal:'4%', marginVertical:'1%', borderRadius:20}}>
+                    <View style={{flex:1.2, flexDirection:'row', paddingTop:'3%'}}>
+                        <TouchableOpacity style={{flex:1, alignItems:'center',borderColor:'black',borderWidth:3, marginHorizontal:'3%', marginVertical:'2%', borderRadius:20}}>
                             <Image source={googleIcon} style={{flex:1, resizeMode:'center'}}></Image>
                         </TouchableOpacity>
                         <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
                             <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
                         </View>
-                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center',borderColor:'#F0F0F0',borderWidth:3, marginHorizontal:'4%', marginVertical:'1%', borderRadius:20}}>
+                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center',borderColor:'#F0F0F0',borderWidth:3, marginHorizontal:'3%', marginVertical:'2%', borderRadius:20}}>
                             <Image source={appleIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
                         </TouchableOpacity>
                         <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
                             <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
                         </View>
-                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center',borderColor:'#F0F0F0',borderWidth:3, marginHorizontal:'4%', marginVertical:'1%', borderRadius:20}}>
+                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center',borderColor:'#F0F0F0',borderWidth:3, marginHorizontal:'3%', marginVertical:'2%', borderRadius:20}}>
                             <Image source={facebookIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
                         </TouchableOpacity>  
                     </View>

@@ -73,11 +73,14 @@ export const SignInScreen = ({navigation})=>{
                         >
                         </TextInput>
                     </View>
-                    
-                    
+                </View>
+                <View style={{flex:0.3, paddingTop:5}}>
+                    <TouchableOpacity style={{flex:1, alignItems:'flex-end'}}>
+                            <Text>Forgot Password?</Text>
+                    </TouchableOpacity>
                 </View>
 
-                <View style={{flex:1, flexDirection:'row'}}>
+                <View style={{flex:1.1, flexDirection:'row', paddingTop:5}}>
                     <View style={{flex:2}}></View>
                     <View style={{flex:1.4}}>
                         <TouchableOpacity style={{flex:1, marginVertical:'8%'}}
@@ -99,7 +102,7 @@ export const SignInScreen = ({navigation})=>{
             </View>
 
             <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'flex-end'}}>
-                <View style={{backgroundColor: 'black', width: width, height: 250, position: 'absolute', left: 0, top: '55%', 
+                <View style={{backgroundColor: 'black', width: width, height: 250, position: 'absolute', left: 0, top: '55%',
                             borderTopLeftRadius: 200, borderTopRightRadius: 200 }}>
                 </View>
                 <Text style={{fontFamily: 'Roboto_700Bold', color:'gray'}}>Don't have an account?</Text>
