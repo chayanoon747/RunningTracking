@@ -11,10 +11,7 @@ const images = [require('../assets/RunningMan_1.png'), require('../assets/Runnin
                 require('../assets/RunningMan_3.png'), require('../assets/RunningMan_4.png')];
 
 export const SignUpScreen = ({navigation})=>{
-    const [profile, setProfile] = useState({'fullname':'','email':'','password':''})
-    const [fullnameValid, setFullNameValid] = useState(true);
-    const [emailValid, setEmailValid] = useState(true);
-    const [passwordValid, setPasswordValid] = useState(true);
+    const [profile, setProfile] = useState({'fullname':'','email':'','password':'','cfPassword':''})
     const [eventTextInput, setEventTextInput] = useState(0);
 
     const googleIcon = require('../assets/google.png')
@@ -53,6 +50,13 @@ export const SignUpScreen = ({navigation})=>{
         }))
     }
 
+    const setCFPassword = (text) => {
+        setProfile(oldValue => ({
+          ...oldValue,
+          cfPassword:text
+        }))
+    }
+
     const success = (doc) => {
         Alert.alert(`${doc.fullname} has been added to system`)
         navigation.goBack()
@@ -65,28 +69,60 @@ export const SignUpScreen = ({navigation})=>{
 
     const handleSignUp = async() => {
         setEventTextInput(1)
-        if(!profile.fullname){
-           setFullNameValid(false)
-        }else{
-            setFullNameValid(true)
+
+        let isFullNameValid = true;
+        let isEmailValid = true;
+        let isPasswordValid = true;
+        let isCFPasswordValid = true;
+        
+        while (true) {
+            if (!profile.fullname) {
+                isFullNameValid = false;
+                Alert.alert('Please provide your fullname information');
+                break;
+            } else {
+                const hasSpace = profile.fullname.includes(' ');
+                if (!hasSpace) {
+                    isFullNameValid = false;
+                    Alert.alert('Please insert a space between your first and last name');
+                    break;
+                }
+            }
+          
+            if (!profile.email) {
+                isEmailValid = false;
+                Alert.alert('Please provide your email information');
+                break;
+            }
+          
+            if (!profile.password) {
+                isPasswordValid = false;
+                Alert.alert('Please provide your password information');
+                break;
+            } else {
+                if (!profile.cfPassword) {
+                    isPasswordValid = false;
+                    Alert.alert('Please provide your confirm password information');
+                    break;
+                } else {
+                    if (profile.password !== profile.cfPassword) {
+                        isCFPasswordValid = false;
+                        Alert.alert('Passwords do not match');
+                        break;
+                    }
+                }
+            }
+            break;
         }
 
-        if(!profile.email){
-            setEmailValid(false)
-        }else{
-            setEmailValid(true)
-        }
-
-        if(!profile.password){
-            setPasswordValid(false)
-        }else{
-            setPasswordValid(true)  
-        }
-
-        if (profile.fullname && profile.email && profile.password) {
-            signUpEmailPass(profile, success, unsuccess)
+        if (isFullNameValid && isEmailValid && isPasswordValid) {
+            console.log('success');
+            //signUpEmailPass(profile, success, unsuccess)
           } else {
-            console.log("Signed up unsuccessful!!");
+            console.log('Signed up unsuccessful!!');
+            console.log(`isFullNameValid: ${isFullNameValid}`);
+            console.log(`isEmailValid: ${isEmailValid}`);
+            console.log(`isPasswordValid: ${isPasswordValid}`);
           }
     };
 
@@ -111,6 +147,11 @@ export const SignUpScreen = ({navigation})=>{
                 if(event == 'iconColor') return profile.password ? 'black':'red';
                 if(event == 'borderColor') return profile.password ? 'transparent':'red';
                 if(event == 'borderWidth') return profile.password ? 0:2;
+            }
+            if(name == 'cfPassword'){
+                if(event == 'iconColor') return profile.cfPassword ? 'black':'red';
+                if(event == 'borderColor') return profile.cfPassword ? 'transparent':'red';
+                if(event == 'borderWidth') return profile.cfPassword ? 0:2;
             }
         }
     }
@@ -183,6 +224,19 @@ export const SignUpScreen = ({navigation})=>{
                         >
                         </TextInput>
                     </View>
+
+                    <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
+                        <Feather name="lock" size={24} color={handleColor('cfPassword','iconColor')} style={{paddingRight:10}}/>
+                        <TextInput label="CONFIRM PASSWORD" value={profile.cfPassword} onChangeText={text => setCFPassword(text)} 
+                            style={[styles.textinput,{borderColor: handleColor('cfPassword','borderColor'), borderWidth: handleColor('cfPassword','borderWidth')}]} 
+                            underlineColor="transparent"
+                            textColor='black'
+                            activeUnderlineColor={handleColor('cfPassword','iconColor')}
+                            secureTextEntry={true}
+                            keyboardType='default'
+                        >
+                        </TextInput>
+                    </View>
                     
                     <View style={{flex:0.5}}></View>
                     
@@ -192,24 +246,6 @@ export const SignUpScreen = ({navigation})=>{
                     >
                         <Text style={{color:'white', fontFamily: 'Roboto_900Black', fontWeight:'bold', fontSize:18}}>SIGN UP</Text>
                     </TouchableOpacity>
-
-                    <View style={{flex:1.2, flexDirection:'row', paddingTop:'3%'}}>
-                        <TouchableOpacity style={{flex:1, alignItems:'center',borderColor:'black',borderWidth:3, marginHorizontal:'3%', marginVertical:'2%', borderRadius:20}}>
-                            <Image source={googleIcon} style={{flex:1, resizeMode:'center'}}></Image>
-                        </TouchableOpacity>
-                        <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
-                            <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
-                        </View>
-                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center',borderColor:'#F0F0F0',borderWidth:3, marginHorizontal:'3%', marginVertical:'2%', borderRadius:20}}>
-                            <Image source={appleIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
-                        </TouchableOpacity>
-                        <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
-                            <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
-                        </View>
-                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center',borderColor:'#F0F0F0',borderWidth:3, marginHorizontal:'3%', marginVertical:'2%', borderRadius:20}}>
-                            <Image source={facebookIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
-                        </TouchableOpacity>  
-                    </View>
                 </View>
             </View>
 

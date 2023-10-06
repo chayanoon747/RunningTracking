@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Alert } from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Alert, Image } from "react-native"
 import { TextInput } from "react-native-paper";
 import { useFonts, Roboto_100Thin, Roboto_500Medium, Roboto_700Bold, Roboto_900Black} from '@expo-google-fonts/roboto';
 import { AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
@@ -12,6 +12,11 @@ export const SignInScreen = ({navigation})=>{
     const [isEmailFocused, setIsEmailFocused] = useState(false);
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
     const { width, height } = Dimensions.get('window');
+
+    const circle = require('../assets/circle.png')
+    const googleIcon = require('../assets/google.png')
+    const appleIcon = require('../assets/apple.png')
+    const facebookIcon = require('../assets/facebook.png')
 
     const [fontsLoaded] = useFonts({
         Roboto_100Thin,
@@ -66,12 +71,18 @@ export const SignInScreen = ({navigation})=>{
         signInEmailPass(credential.email, credential.password, success, unsuccess)
     }
 
+    const circlePosition = (width)=>{
+        if(width < 400){
+            return -(height * (50/100))
+        }else if(width > 800){
+            return -(height * (75/100))
+        }
+    }
+
     return(
         <SafeAreaView style={{flex:1}}>
-            <View style={{flex:1}}>
-                <View style={{backgroundColor: 'black', width: width, height: 250, position: 'absolute', left: 0, top: '-90%', 
-                                borderBottomLeftRadius: 200, borderBottomRightRadius: 200 }}>
-                </View>
+            <View style={{flex:0.8, alignItems:'center'}}>
+                <Image source={circle} style={{width:width,height:width*1.3, opacity:1, position: 'absolute', left: 0, top: circlePosition(width)}}></Image>
             </View>
             <View style={{flex:2, margin:20}}>
 
@@ -101,7 +112,8 @@ export const SignInScreen = ({navigation})=>{
                             value={credential.password}
                             onChangeText={(text)=>{setPassword(text)}}
                             onFocus={handlePasswordFocus}
-                            onBlur={handleTextInputBlur}   
+                            onBlur={handleTextInputBlur}  
+                            secureTextEntry={true} 
                             activeUnderlineColor='black'
                         >
                         </TextInput>
@@ -113,7 +125,7 @@ export const SignInScreen = ({navigation})=>{
                     </TouchableOpacity>
                 </View>
 
-                <View style={{flex:1.1, flexDirection:'row', paddingTop:5}}>
+                <View style={{flex:1.2, flexDirection:'row', paddingTop:5}}>
                     <View style={{flex:2}}></View>
                     <View style={{flex:1.4}}>
                         <TouchableOpacity style={{flex:1, marginVertical:'8%'}}
@@ -130,20 +142,38 @@ export const SignInScreen = ({navigation})=>{
                         </TouchableOpacity>
                     </View>
                 </View>
+                <View style={{flex:1.5, flexDirection:'row', paddingTop:'3%'}}>
+                        <TouchableOpacity style={{flex:1, alignItems:'center', marginHorizontal:'3%', marginVertical:'2%'}}>
+                            <Image source={googleIcon} style={{flex:1, resizeMode:'center'}}></Image>
+                        </TouchableOpacity>
+                        <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
+                            <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
+                        </View>
+                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center', marginHorizontal:'3%', marginVertical:'2%'}}>
+                            <Image source={appleIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
+                        </TouchableOpacity>
+                        <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
+                            <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
+                        </View>
+                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center', marginHorizontal:'3%', marginVertical:'2%'}}>
+                            <Image source={facebookIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
+                        </TouchableOpacity>  
+                </View>
             </View>
 
-            <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'flex-end'}}>
-                <View style={{backgroundColor: 'black', width: width, height: 250, position: 'absolute', left: 0, top: '55%',
-                            borderTopLeftRadius: 200, borderTopRightRadius: 200 }}>
+            <View style={{flex:0.5}}>
+                <Image source={circle} style={{width:width,height:width*1.3, opacity:1, position: 'absolute', left: 0, bottom: circlePosition(width)}}></Image>
+                <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'flex-end'}}>
+                    <Text style={{fontFamily: 'Roboto_700Bold', color:'gray'}}>Don't have an account?</Text>
+                    <TouchableOpacity
+                        onPress={()=>{
+                            navigation.navigate('SignUpScreen')
+                        }}
+                    >
+                        <Text style={{fontFamily: 'Roboto_900Black', color:'#FFFFFF'}}> Sign Up</Text>
+                    </TouchableOpacity>
                 </View>
-                <Text style={{fontFamily: 'Roboto_700Bold', color:'gray'}}>Don't have an account?</Text>
-                <TouchableOpacity
-                    onPress={()=>{
-                        navigation.navigate('SignUpScreen')
-                    }}
-                >
-                    <Text style={{fontFamily: 'Roboto_900Black', color:'#FFFFFF'}}> Sign Up</Text>
-                </TouchableOpacity>
+                
             </View>
         </SafeAreaView>
     )
