@@ -93,7 +93,9 @@ export const SignInScreen = ({navigation})=>{
     const circlePosition = (width)=>{
         if(width < 400){
             return -(height * (50/100))
-        }else if(width > 800){
+        }else if(width < 800){
+            return -(height * (60/100))
+        }else{
             return -(height * (75/100))
         }
     }
