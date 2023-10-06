@@ -20,7 +20,6 @@ export const signUpEmailPass = (profile, success, unsuccess)=>{
     })
     .catch((error)=>{
       const msg = (`signUpEmailPass error: ${error}`)
-      console.error(msg)
       unsuccess(msg)
     })
 }
@@ -34,7 +33,6 @@ export const signInEmailPass = (email, password, success,unsuccess) => {
   })
   .catch((error) => {
     const msg = (`signInEmailPass error: ${error}`)
-    console.error(msg)
     unsuccess(msg)
   });
 }
@@ -47,7 +45,6 @@ export const signOutUser = (success, unsuccess)=>{
   })
   .catch((error)=>{
     const msg = (`logout error: ${error}`)
-    console.error(msg)
     unsuccess(msg)
   })
 }
