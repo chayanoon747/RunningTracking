@@ -5,7 +5,7 @@ import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { useFonts, Roboto_100Thin, Roboto_500Medium, Roboto_700Bold, Roboto_900Black} from '@expo-google-fonts/roboto';
 
-export const RunScreen = () => {
+export const RunScreen = ({navigation}) => {
     const { width, height } = Dimensions.get('window');
 
     const [iconName, setIconName] = useState('play-circle');

@@ -1,12 +1,14 @@
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from "react-native"
+import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Alert } from "react-native"
 import { TextInput } from "react-native-paper";
 import { useFonts, Roboto_100Thin, Roboto_500Medium, Roboto_700Bold, Roboto_900Black} from '@expo-google-fonts/roboto';
 import { AntDesign, MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import { useState } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from 'expo-linear-gradient';
+import { signInEmailPass } from "../firebase/AuthModel";
 
 export const SignInScreen = ({navigation})=>{
+    const [credential,setCredential] = useState({username:'',password:''})
     const [isEmailFocused, setIsEmailFocused] = useState(false);
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
     const { width, height } = Dimensions.get('window');
@@ -22,6 +24,29 @@ export const SignInScreen = ({navigation})=>{
         return null; 
     }
 
+    const setEmail = (text) => {
+        setCredential(oldValue => ({
+            ...oldValue,
+            email:text
+        }))
+      }
+    
+    const setPassword = (text) => {
+        setCredential(oldValue => ({
+            ...oldValue,
+            password:text
+        }))
+    }
+
+    const success = (item) => {
+        navigation.navigate('BottomTabNav')
+      }
+    
+      const unsuccess = (msg) => {
+        console.log(msg)
+        Alert.alert(msg)
+      }
+
     const handleEmailFocus = () => {
         setIsEmailFocused(true);
         setIsPasswordFocused(false); 
@@ -36,6 +61,10 @@ export const SignInScreen = ({navigation})=>{
         setIsEmailFocused(false);
         setIsPasswordFocused(false); 
     };
+
+    const handleSignIn = ()=>{
+        signInEmailPass(credential.email, credential.password, success, unsuccess)
+    }
 
     return(
         <SafeAreaView style={{flex:1}}>
@@ -56,6 +85,8 @@ export const SignInScreen = ({navigation})=>{
                         <MaterialCommunityIcons name={isEmailFocused ? 'email-open-outline' : 'email-outline'} size={24} color="black" style={{paddingHorizontal:10}}/>
                         <TextInput style={styles.textinput} 
                             label='EMAIL'
+                            value={credential.email}
+                            onChangeText={(text)=>{setEmail(text)}}
                             onFocus={handleEmailFocus}
                             onBlur={handleTextInputBlur}
                             activeUnderlineColor='black'
@@ -67,6 +98,8 @@ export const SignInScreen = ({navigation})=>{
                         <Feather name={isPasswordFocused ? 'unlock' : 'lock'} size={24} color="black" style={{paddingHorizontal:10}}/>
                         <TextInput style={styles.textinput} 
                             label='PASSWORD'
+                            value={credential.password}
+                            onChangeText={(text)=>{setPassword(text)}}
                             onFocus={handlePasswordFocus}
                             onBlur={handleTextInputBlur}   
                             activeUnderlineColor='black'
@@ -84,9 +117,7 @@ export const SignInScreen = ({navigation})=>{
                     <View style={{flex:2}}></View>
                     <View style={{flex:1.4}}>
                         <TouchableOpacity style={{flex:1, marginVertical:'8%'}}
-                            onPress={()=>{
-                                navigation.navigate('BottomTabNav')
-                            }}
+                            onPress={handleSignIn}
                         >
                             <LinearGradient 
                                 colors={['#000000','#000000']} 

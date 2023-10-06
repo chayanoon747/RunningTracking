@@ -5,6 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EditComp } from "../components/EditComp";
 import { useState } from "react";
 import * as ImagePicker from 'expo-image-picker';
+import { signOutUser } from "../firebase/AuthModel";
 
 export const ProfileScreen = ({navigation})=>{
 
@@ -40,6 +41,20 @@ export const ProfileScreen = ({navigation})=>{
     if (!fontsLoaded) {
         return null; 
     }
+
+    const success = () => {
+        navigation.navigate('SplashScreen')
+      }
+
+    const unsuccess = (msg) => {
+        console.log(msg)
+        Alert.alert(msg)
+    }
+
+    const handleSignOut = () => {
+        console.log('Logout now')
+        signOutUser(success, unsuccess)
+    } 
     
     return(
         <View style={{flex:1}}>
@@ -72,9 +87,7 @@ export const ProfileScreen = ({navigation})=>{
                     </View>
                     <View style={{flex:1, paddingBottom:8}}>
                         <TouchableOpacity style={{flex:1, backgroundColor:'#DC143C', justifyContent:'center', borderRadius:20, marginVertical:12, marginHorizontal:25}}
-                            onPress={()=>{
-                                navigation.navigate('SignInScreen')
-                            }}
+                            onPress={handleSignOut}
                         >
                             <Text style={{fontFamily:'Roboto_900Black', textAlign:'center', color:'white', fontSize:16}}>SIGN OUT</Text>
                         </TouchableOpacity>
