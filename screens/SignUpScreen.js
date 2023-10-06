@@ -143,8 +143,8 @@ export const SignUpScreen = ({navigation})=>{
                 </View>
             </View>
 
-            <View style={{flex:3, borderTopLeftRadius:60, borderTopRightRadius:60, backgroundColor:'white', borderWidth:3, borderColor:'green'}}>
-                <View style={{flex:1, marginHorizontal:'5%', marginTop:'5%', marginBottom:'2%', borderWidth:3, borderColor:'red'}}>
+            <View style={{flex:3, borderTopLeftRadius:60, borderTopRightRadius:60, backgroundColor:'white'}}>
+                <View style={{flex:1, marginHorizontal:'5%', marginTop:'5%', marginBottom:'2%'}}>
                             
                     <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
                         <AntDesign name="user" size={24} color={handleColor('fullname','iconColor')} style={{paddingRight:10}}/>
