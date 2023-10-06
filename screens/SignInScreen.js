@@ -8,7 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { signInEmailPass } from "../firebase/AuthModel";
 
 export const SignInScreen = ({navigation})=>{
-    const [credential,setCredential] = useState({username:'',password:''})
+    const [credential,setCredential] = useState({email:'',password:''})
     const [isEmailFocused, setIsEmailFocused] = useState(false);
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
     const { width, height } = Dimensions.get('window');
@@ -43,7 +43,7 @@ export const SignInScreen = ({navigation})=>{
         }))
     }
 
-    const success = (item) => {
+    const success = () => {
         navigation.navigate('BottomTabNav')
       }
     
@@ -68,7 +68,26 @@ export const SignInScreen = ({navigation})=>{
     };
 
     const handleSignIn = ()=>{
-        signInEmailPass(credential.email, credential.password, success, unsuccess)
+        let isEmailValid = true;
+        let isPasswordValid = true;
+
+        while(true){
+            if(!credential.email){
+                isEmailValid = false;
+                Alert.alert('Please provide your email information');
+                break;
+            }
+            if(!credential.password){
+                isPasswordValid = false;
+                Alert.alert('Please provide your password information');
+                break;
+            }
+            break;
+        }
+
+        if(isEmailValid && isPasswordValid){
+            signInEmailPass(credential.email, credential.password, success, unsuccess)
+        }
     }
 
     const circlePosition = (width)=>{
