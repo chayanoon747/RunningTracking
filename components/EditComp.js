@@ -1,6 +1,6 @@
 import { View, TouchableOpacity } from "react-native"
 import { TextInput } from "react-native-paper";
-import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Feather, FontAwesome } from '@expo/vector-icons';
 import { useState } from "react";
 import { updateFullName, updateWeight } from '../firebase/UserModel';
 import { useDispatch, useSelector } from 'react-redux'
@@ -60,9 +60,21 @@ export const EditComp = (props)=>{
         
     }
 
+    const TextInputIcon = ()=>{
+        if(edit == 'fullname'){
+            return <FontAwesome name="id-card" size={24} color="black" style={{position: 'absolute', left:'2%', top: 'auto'}}/>
+        }
+        else if(edit == 'weight'){
+            return <MaterialCommunityIcons name="weight-kilogram" size={24} color="black" style={{position: 'absolute', left:'2.5%', top: 'auto'}}/>
+        }
+        else if(edit == 'email'){
+            return <MaterialCommunityIcons name="email" size={24} color="black" style={{position: 'absolute', left:'2.5%', top: 'auto'}}/>
+        }    
+    }
+
     return(
         <View style={{flex:1, flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
-            <TextInput style={{flex:1, backgroundColor:'white', borderWidth:3, borderColor:editValue ? 'red' : 'black', marginRight:5, fontSize:15}}
+            <TextInput style={{flex:1, backgroundColor:'white', borderWidth:3, borderColor:editValue ? 'red' : 'black', marginRight:5, fontSize:15, paddingLeft:'7%'}}
                 editable={editValue} 
                 value={textValue} 
                 onChangeText={handleTextChange}
@@ -71,7 +83,9 @@ export const EditComp = (props)=>{
                 placeholder={placeholder}
                 placeholderColor="transparent"
             >
+                
             </TextInput>
+            {TextInputIcon()}
             <TouchableOpacity onPress={handleEditPress}>
                 {CompEditIcon()}
             </TouchableOpacity>                   
