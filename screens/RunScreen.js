@@ -15,11 +15,9 @@ export const RunScreen = ({navigation}) => {
     const [location, setLocation] = useState(null);
     const [isTracking, setIsTracking] = useState(false);
     const [coordinates, setCoordinates] = useState([]);
-    const [loading, setLoading] = useState(true); // เพิ่ม state สำหรับสถานะการโหลด
     const [timeElapsed, setTimeElapsed] = useState(0);
     const [timeInMinute, setTimeInMinute] = useState(0);
     const [timeInSecond, setTimeInSecond] = useState(0);
-    const [oldDistance, setOldDistance] = useState(0);
     const [oldCoordinates, setOldCoordinates] = useState([]);
     const subscriptionRef = useRef(null);
 
@@ -90,8 +88,8 @@ export const RunScreen = ({navigation}) => {
         // สูตร (Math.sin(dLat / 2) ยกกำลังสอง) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * (Math.sin(dLon / 2) ยกกำลังสอง)
         const a =
             Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // ค่ามุมระหว่างจุดที่สองบนผิวโลก
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2); //ค่าระยะห่างระหว่างจุดที่ 1 และ 2 บนผิวโลกในหน่วยรัศมี
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // ค่ามุมระหว่างจุดที่ 1 และ 2 บนผิวโลก
         const distance = R * c; // ระยะทางระหว่างจุดทั้งสองในหน่วยกิโลเมตร
         return distance;
     };
@@ -99,6 +97,7 @@ export const RunScreen = ({navigation}) => {
     const calculateTotalDistance = () => {
         let totalDistance = 0; // เก็บระยะทางรวมของเส้นทาง
         for (let i = 1; i < coordinates.length; i++) {
+            console.log(`i: ${i}`);
             const prevCoordinate = coordinates[i - 1]; //ดึงจุดตำแหน่ง prev
             const currentCoordinate = coordinates[i]; //ดึงจุดตำแหน่ง current
             totalDistance += haversine(
@@ -156,7 +155,6 @@ export const RunScreen = ({navigation}) => {
         }else{
             return 0;
         }
-        
     }
 
     const calculateCaloriesBurned = () => {
@@ -186,8 +184,8 @@ export const RunScreen = ({navigation}) => {
                 subscriptionRef.current = await Location.watchPositionAsync(
                     {
                         accuracy: Location.Accuracy.High,
-                        timeInterval: 5000,
-                        distanceInterval: 10,
+                        timeInterval: 5000, // milliseconds
+                        distanceInterval: 10, // meters
                     },
                     (location) => {
                         if (eventTracking == 1) {
@@ -215,8 +213,6 @@ export const RunScreen = ({navigation}) => {
             setIconName('play-circle');
             eventTracking = 0;
             setOldCoordinates(coordinates);
-            // บันทึกระยะทางที่คำนวณไว้ใน oldDistance เมื่อหยุดการติดตาม
-            setOldDistance(calculateTotalDistance());
     
             if (subscriptionRef.current) {
                 await subscriptionRef.current.remove();
@@ -233,16 +229,13 @@ export const RunScreen = ({navigation}) => {
             const { status } = await Location.requestForegroundPermissionsAsync();
             if (status !== 'granted') {
                 console.error('ไม่ได้รับอนุญาตให้เข้าถึงตำแหน่ง');
-                setLoading(false); // หยุดโหลดหลังจากตรวจสอบสถานะอนุญาต
                 return;
             }
 
             const initialLocation = await Location.getCurrentPositionAsync({});
             setLocation(initialLocation); // อัปเดตตำแหน่งเริ่มต้นใน state
-            setLoading(false); // หยุดโหลดหลังจากได้ตำแหน่ง
         } catch (error) {
             console.error(error);
-            setLoading(false); // หยุดโหลดหลังจากเกิดข้อผิดพลาด
         }
     };
 
