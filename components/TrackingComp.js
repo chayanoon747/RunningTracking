@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Button, Text } from 'react-native';
+import { View, Button, Text, StyleSheet, TouchableOpacity, Modal, Image } from 'react-native';
 import MapView, { Polyline, Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import { Picker } from '@react-native-picker/picker';
 
 export const TrackingComp = () => {
     const [location, setLocation] = useState(null);
@@ -11,7 +12,15 @@ export const TrackingComp = () => {
     const [timeElapsed, setTimeElapsed] = useState(0);
     const [timeInMinute, setTimeInMinute] = useState(0);
     const [timeInSecond, setTimeInSecond] = useState(0);
+    const [selectedGoal, setSelectedGoal] = useState(1);
+    const [challengeStarted, setChallengeStarted] = useState(false);
+    const [showChallengePopup, setShowChallengePopup] = useState(false);
+
+    const trophy = require('../assets/trophy.png')
+
     let subscription = null;
+
+    const [showLocationInfo, setShowLocationInfo] = useState(false);
     
     useEffect(() => {
         let timerId;
@@ -166,6 +175,22 @@ export const TrackingComp = () => {
         }
     };
 
+    const startChallenge = () => {
+        setChallengeStarted(true);
+        startTracking();
+    };
+
+    const finishChallenge = () => {
+        setIsTracking(false);
+        if (subscription) {
+            subscription.remove();
+        }
+    };
+
+    const closeChallengePopup = () => {
+        setShowChallengePopup(false);
+    };
+
     useEffect(() => {
         getLocation();
     }, []);
@@ -189,14 +214,50 @@ export const TrackingComp = () => {
     };
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: 'white' }}>
             {loading ? (
-                <Text style={{ fontSize: 16 }}>กำลังดึงตำแหน่ง...</Text>
+                <Text style={styles.loadingText}>กำลังดึงตำแหน่ง...</Text>
             ) : location ? (
-                <>
-                    <Text style={{ fontSize: 16 }}>
-                        Latitude: {location.coords.latitude}, Longitude: {location.coords.longitude}
+                <View style={styles.trackingContainer}>
+                    <Text style={styles.challengeInfo}>
+                        Goal: {selectedGoal} km
                     </Text>
+
+                    <Picker
+                        selectedValue={selectedGoal}
+                        onValueChange={(itemValue, itemIndex) => setSelectedGoal(itemValue)}
+                        style={{ marginVertical:-75}}
+                    >
+                        <Picker.Item label="0.1 km" value={0.1} />
+                        <Picker.Item label="0.2 km" value={0.2} />
+                        <Picker.Item label="0.3 km" value={0.3} />
+                        <Picker.Item label="0.4 km" value={0.4} />
+                        <Picker.Item label="0.5 km" value={0.5} />
+                        <Picker.Item label="0.6 km" value={0.6} />
+                        <Picker.Item label="0.7 km" value={0.7} />
+                        <Picker.Item label="0.8 km" value={0.8} />
+                        <Picker.Item label="0.9 km" value={0.9} />
+                        <Picker.Item label="1 km" value={1} />
+                    </Picker>
+    
+                    <TouchableOpacity
+                        style={{
+                            borderRadius: showLocationInfo ? 20 : 0,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                        }}
+                        onPress={() => {
+                            setShowLocationInfo(!showLocationInfo);
+                        }}
+                    >
+                    <Text style={{ fontStyle: 'italic',textDecorationLine:'underline', marginBottom: 5 }}>Show Location</Text>
+                    </TouchableOpacity>
+                    {showLocationInfo ? (
+                        <Text style={{ textAlign: 'center', fontSize: 16, marginBottom: 10 }}>
+                            Latitude: {location.coords.latitude}, Longitude: {location.coords.longitude}
+                        </Text>
+                    ) : null}
+    
                     <MapView
                         style={{ flex: 1 }}
                         region={{
@@ -206,32 +267,101 @@ export const TrackingComp = () => {
                             longitudeDelta: 0.0421,
                         }}
                     >
-                        <Polyline
-                            coordinates={coordinates}
-                            strokeWidth={5}
-                            strokeColor="blue"
-                        />
+                        <Polyline coordinates={coordinates} strokeWidth={5} strokeColor="blue" />
                         {coordinates.length > 0 && (
-                            <Marker
-                                coordinate={coordinates[coordinates.length - 1]}
-                                title="Current Location"
-                            />
+                            <Marker coordinate={coordinates[coordinates.length - 1]} title="Current Location" />
                         )}
                     </MapView>
-                </>
+    
+                    {challengeStarted ? (
+                        <Button
+                            title="Finish Challenge"
+                            onPress={() => {
+                                if (calculateTotalDistance() > selectedGoal) { // 0.1 -> 1 km
+                                    finishChallenge();
+                                    setShowChallengePopup(true);
+                                }
+                            }}
+                            disabled={!isTracking}
+                        />
+                    ) : (
+                        <Button
+                            title="Start Challenge"
+                            onPress={startChallenge}
+                            disabled={!location}
+                        />
+                    )}
+    
+                    
+                </View>
             ) : (
-                <Text>ไม่สามารถดึงตำแหน่งได้</Text>
+                <Text style={styles.errorText}>ไม่สามารถดึงตำแหน่งได้</Text>
             )}
-            
-            <Button
-                title={isTracking ? 'หยุด' : 'เริ่ม'}
-                onPress={isTracking ? stopTracking : startTracking}
-                disabled={!location} // ปิดการใช้งานปุ่มเริ่ม/หยุด ถ้าไม่มีข้อมูลตำแหน่ง
-            />
-            <Text>Distance: {calculateTotalDistance().toFixed(2)} กิโลเมตร</Text>
-            <Text>Time: {timeInMinute}:{timeInSecond} นาที</Text>
-            <Text>Pace: {calculatePace().toFixed(2)} นาที/กิโลเมตร</Text>
-            <Text>Calories: {calculateCaloriesBurned().toFixed(2)} กิโลแคลอรี</Text>
+
+        <Modal visible={showChallengePopup} animationType="slide" transparent={true}>
+            <View style={styles.challengePopup}>
+                <Image source={trophy} style={styles.trophyIcon} />
+                <Text style={styles.challengeText}>ยินดีด้วยยย!!</Text>
+                <Text style={styles.challengeText}>คุณทำ Challenge วันนี้สำเร็จ!</Text>
+                <View style={styles.dataContainer}>
+                        <Text style={styles.dataText}> • Distance: {calculateTotalDistance().toFixed(2)} กิโลเมตร</Text>
+                        <Text style={styles.dataText}> • Time: {timeInMinute}:{timeInSecond} นาที</Text>
+                        <Text style={styles.dataText}> • Pace: {calculatePace().toFixed(2)} นาที/กิโลเมตร</Text>
+                        <Text style={styles.dataText}> • Calories: {calculateCaloriesBurned().toFixed(2)} กิโลแคลอรี</Text>
+                </View>
+                <Button title="Close" onPress={closeChallengePopup} />
+            </View>
+        </Modal>
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    loadingText: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginTop: 10,
+    },
+    trackingContainer: {
+        flex: 1,
+    },
+    coordinatesText: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 10,
+    },
+    errorText: {
+        fontSize: 16,
+        textAlign: 'center',
+    },
+    dataContainer: {
+        margin: 10,
+    },
+    dataText: {
+        fontSize: 16,
+        marginBottom: 5,
+        color: 'white',
+    },
+    challengeInfo: {
+        fontSize: 24,
+        textAlign: 'center',
+        marginVertical: 10,
+        fontWeight:'bold',
+    },
+    challengePopup: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    },
+    trophyIcon: {
+        width: 200,
+        height: 200,
+    },
+    challengeText: {
+        color: 'white',
+        fontSize: 24,
+        marginTop: 10,
+    },
+});
+
