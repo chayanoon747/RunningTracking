@@ -48,3 +48,16 @@ export const signOutUser = (success, unsuccess)=>{
     unsuccess(msg)
   })
 }
+
+export const resetPassword = (email,success, unsuccess) => {
+  sendPasswordResetEmail(auth, email)
+    .then(() => {
+      console.log()
+      success()
+    })
+    .catch((error) => {
+        const msg = `Reset password error: ${error}`
+        console.error(msg)
+        unsuccess(msg)
+      }) 
+  }
