@@ -117,7 +117,7 @@ export const SignUpScreen = ({navigation})=>{
 
         if (isFullNameValid && isEmailValid && isPasswordValid) {
             console.log('success');
-            //signUpEmailPass(profile, success, unsuccess)
+            signUpEmailPass(profile, success, unsuccess)
           } else {
             console.log('Signed up unsuccessful!!');
             console.log(`isFullNameValid: ${isFullNameValid}`);

@@ -25,7 +25,8 @@ export const RunScreen = ({navigation}) => {
 
     const user = useSelector((state)=>state.auths);
     const userUID = user[0].uid
-    console.log(user)
+    const weight = user[0].weight || 50
+    
     
     let eventTracking = 0;
 
@@ -95,7 +96,6 @@ export const RunScreen = ({navigation}) => {
         return distance;
     };
 
-    
     const calculateTotalDistance = () => {
         let totalDistance = 0; // เก็บระยะทางรวมของเส้นทาง
         for (let i = 1; i < coordinates.length; i++) {
@@ -160,9 +160,8 @@ export const RunScreen = ({navigation}) => {
     }
 
     const calculateCaloriesBurned = () => {
-        //const userData = await getUserData(userUID);
-        weightInKilograms =  50;
-        console.log(weightInKilograms);
+        weightInKilograms = weight;
+        console.log(`Weight: ${weight}`)
         if(!weightInKilograms){
             weightInKilograms = 50;
         }
@@ -246,7 +245,6 @@ export const RunScreen = ({navigation}) => {
             setLoading(false); // หยุดโหลดหลังจากเกิดข้อผิดพลาด
         }
     };
-    
 
     const [fontsLoaded] = useFonts({
         Roboto_100Thin,

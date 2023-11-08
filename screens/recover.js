@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import {View, Text, Alert,TouchableOpacity, StyleSheet} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { AuthInput } from "./authinput"
+import { AuthInput } from './authinput'
 
 import {resetPassword} from '../firebase/AuthModel'
 

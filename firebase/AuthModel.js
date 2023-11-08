@@ -5,7 +5,6 @@ import {
   updateProfile, updatePassword, sendPasswordResetEmail,
   initializeAuth, getReactNativePersistence
 } from 'firebase/auth'
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 import {addUser} from './UserModel'
 
 const auth = getAuth(app)
@@ -59,5 +58,5 @@ export const resetPassword = (email,success, unsuccess) => {
         const msg = `Reset password error: ${error}`
         console.error(msg)
         unsuccess(msg)
-      }) 
-  }
+    }) 
+}

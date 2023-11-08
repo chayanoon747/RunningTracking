@@ -74,6 +74,7 @@ export const TrackingComp = () => {
     // คำนวณระยะทางรวมของเส้นทางที่ผู้ใช้เคลื่อนที่ 
     const calculateTotalDistance = () => {
         let totalDistance = 0; // เก็บระยะทางรวมของเส้นทาง
+        console.log(coordinates);
         for (let i = 1; i < coordinates.length; i++) {
             const prevCoordinate = coordinates[i - 1]; //ดึงจุดตำแหน่ง prev
             const currentCoordinate = coordinates[i]; //ดึงจุดตำแหน่ง current
@@ -99,40 +100,54 @@ export const TrackingComp = () => {
         }
 
         const totalDistance = calculateTotalDistance(); // ระยะทางรวมในหน่วยกิโลเมตร
-        const totalTimeInMinutes = calculateTotalTime();
+        const totalTimeInMinutes = timeElapsed/ 60000;
+        console.log(`totalTimeInMinutes: ${totalTimeInMinutes}`)
+        if(totalDistance <= 0.1){
+            return 0;
+        }else{
+            return totalTimeInMinutes / totalDistance;
+        }
 
-        return totalTimeInMinutes / totalDistance;
+        
     };
-
+    
     const calculateMETs = () => {
-        const totalDistance = calculateTotalDistance(); 
-        const totalTimeInMinutes = calculateTotalTime();
+        const totalDistance = calculateTotalDistance();
+        const totalTimeInMinutes = timeElapsed/ 60000;
+        
         const speedInKilometerPerHour = (60 / totalTimeInMinutes) * totalDistance;
-        if(speedInKilometerPerHour <= 30){
-            if(speedInKilometerPerHour > 13 ){
-                return 14;
-            }else if(speedInKilometerPerHour > 10){
-                return 12.4;
-            }else if(speedInKilometerPerHour > 7){
-                return 9.6;
-            }else if(speedInKilometerPerHour > 6){
-                return 6.2;
-            }else if(speedInKilometerPerHour > 4){
-                return 4.1;
+        console.log(`totalDistance: ${totalDistance}`)
+        if(totalDistance > 0.1){
+            if(speedInKilometerPerHour <= 30){
+                if(speedInKilometerPerHour > 13 ){
+                    return 14;
+                }else if(speedInKilometerPerHour > 10){
+                    return 12.4;
+                }else if(speedInKilometerPerHour > 7){
+                    return 9.6;
+                }else if(speedInKilometerPerHour > 6){
+                    return 6.2;
+                }else if(speedInKilometerPerHour > 4){
+                    return 4.1;
+                }else{
+                    return 2.4;
+                }
             }else{
-                return 2.4;
+                return 0;
+                
             }
         }else{
             return 0;
         }
+        
     }
 
     const calculateCaloriesBurned = () => {
         const weightInKilograms = 50;
-        const totalTimeInMinutes = calculateTotalTime();
+        const totalTimeInMinutes = timeElapsed / 60000;
         const METs = calculateMETs();
         const caloriesBurned = METs * 0.0175 * weightInKilograms * totalTimeInMinutes // คำนวณแคลอรี่ที่เผาผลาญ
-    
+        console.log(`METs: ${METs}`)
         return caloriesBurned;
     };
 
@@ -364,4 +379,3 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
 });
-

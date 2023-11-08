@@ -1,20 +1,46 @@
-import { View, Text, Dimensions, Image, TouchableOpacity } from "react-native"
+import { View, Text, Dimensions, Image, TouchableOpacity, Alert } from "react-native"
 import { useFonts, Roboto_100Thin, Roboto_500Medium, Roboto_700Bold, Roboto_900Black} from '@expo-google-fonts/roboto';
 import { TextInput } from "react-native-paper";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { EditComp } from "../components/EditComp";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as ImagePicker from 'expo-image-picker';
 import { signOutUser } from "../firebase/AuthModel";
+import { getUserData, uploadImageToFirestore } from "../firebase/UserModel"
+import { useSelector } from 'react-redux'
 
 export const ProfileScreen = ({navigation})=>{
 
     const { width, height } = Dimensions.get('window');
-    const [firstName, setFirstName] = useState('Chayanon');
-    const [lastName, setLastName] = useState('Pissanuwattanasak');
-    const firstNameUpper = firstName.toUpperCase()
-    const lastNameUpper = lastName.toUpperCase()
+    const [fullName, setFullName] = useState(null);
+    const [firstName, setFirstName] = useState(null);
+    const [lastName, setLastName] = useState(null);
+    const [email, setEmail] = useState(null);
+    const [weight, setWeight] = useState(null);
     const [selectedImage, setSelectedImage] = useState(null);
+
+    const user = useSelector((state)=>state.auths);
+    const userUID = user[0].uid
+    
+
+    useEffect(() => {
+        const fetchData = async() => {
+            const userData = await getUserData(userUID);
+            const fullname = userData.fullname;
+            const fullnameSplit = fullname.split(" ");
+            setFullName(userData.fullname.toUpperCase());
+            setFirstName(fullnameSplit[0].toUpperCase());
+            setLastName(fullnameSplit[fullnameSplit.length - 1].toUpperCase())
+            setEmail(userData.email)
+            setWeight(userData.weight)
+            console.log(user[0].weight)
+        };
+      
+        fetchData();
+    }, [firstName, lastName, email, weight, fullName]);
+
+    
+      
 
     const selectImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -28,6 +54,15 @@ export const ProfileScreen = ({navigation})=>{
         if (!result.canceled) {
             const selectedImage = result.assets[0];
             setSelectedImage({ uri: selectedImage.uri });
+            console.log(selectedImage);
+
+            // เรียกใช้ฟังก์ชันเพื่ออัปโหลดรูปภาพไปยัง Firestore
+            /*if (userUID) {
+                const onlineURL = URL.createObjectURL(selectedImage.uri);
+                uploadImageToFirestore(userUID, onlineURL);
+            } else {
+                alert('Error to upload image');
+            }*/
         }
     };
 
@@ -42,7 +77,7 @@ export const ProfileScreen = ({navigation})=>{
         return null; 
     }
 
-    const success = () => {
+    const success = async() => {
         navigation.navigate('SplashScreen')
       }
 
@@ -71,19 +106,24 @@ export const ProfileScreen = ({navigation})=>{
                             </TouchableOpacity>
                         </View>
                         <View style={{flex:0.4, marginHorizontal:'25%'}}>
-                            <Text style={{fontFamily:'Roboto_900Black',textAlign:'center', color:'white', fontWeight:'bold', fontSize:16}}>{firstNameUpper}</Text>
-                            <Text style={{fontFamily:'Roboto_900Black',textAlign:'center', color:'white', fontWeight:'bold', fontSize:16}}>{lastNameUpper}</Text>
+                            <Text style={{fontFamily:'Roboto_900Black',textAlign:'center', color:'white', fontWeight:'bold', fontSize:16}}>{firstName}</Text>
+                            <Text style={{fontFamily:'Roboto_900Black',textAlign:'center', color:'white', fontWeight:'bold', fontSize:16}}>{lastName}</Text>
                         </View>
                     </View>
                 </View>
                 <View style={{flex:1}}>
                     <View style={{flex:3}}>
-                        <View style={{flex:1, marginTop:10, marginHorizontal:25}}>
-                            <EditComp value={firstName}/>
-                            <EditComp value={lastName}/>
-                            <EditComp value="chayanon.pi@ku.th"/>
-                        </View>
-                        
+                        {fullName && email ? (
+                            <View style={{flex:1, marginTop:10, marginHorizontal:25}}>
+                            <EditComp value={fullName} uid={userUID} edit="fullname" placeholder="FULLNAME" email={email}/>
+                            <EditComp value={user[0].weight.toString()} uid={userUID} edit="weight" placeholder="WEIGHT(KG)" email={email}/>
+                            <EditComp value={email} uid={userUID} edit="email" />
+                            </View>
+                        ) : (
+                            <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
+                            <Text>Loading...</Text>
+                            </View>
+                        )}
                     </View>
                     <View style={{flex:1, paddingBottom:8}}>
                         <TouchableOpacity style={{flex:1, backgroundColor:'#DC143C', justifyContent:'center', borderRadius:20, marginVertical:12, marginHorizontal:25}}
