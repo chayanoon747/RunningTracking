@@ -3,9 +3,17 @@ import { SplashScreen } from '../screens/SplashScreen'
 import { BottomTabNav } from './BottomTabNav'
 import { SignInScreen } from '../screens/SignInScreen'
 import { SignUpScreen } from '../screens/SignUpScreen'
+import {Recover} from '../screens/recover'
 
 export const StackNav = ()=>{
   const Stack = createNativeStackNavigator()
+  
+  const RecoverScreen = ({ navigation, route }) => {
+    return (
+      <Recover nav={navigation} route={route} />
+    )
+  }
+
   return(
     <Stack.Navigator
       initialRouteName="SplashScreen" 
@@ -35,6 +43,11 @@ export const StackNav = ()=>{
         component={BottomTabNav}
         options={{ headerShown: false }}
       />
+
+      <Stack.Screen 
+      name="Recover" 
+      component={RecoverScreen} 
+      options={{ headerShown: true }} />
     </Stack.Navigator>
   )
 }

@@ -6,8 +6,9 @@ import { useState } from 'react';
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from 'expo-linear-gradient';
 import { signInEmailPass } from "../firebase/AuthModel";
+import { Recover } from "../screens/recover";
 
-export const SignInScreen = ({navigation})=>{
+export const SignInScreen = ({navigation, props})=>{
     const [credential,setCredential] = useState({email:'',password:''})
     const [isEmailFocused, setIsEmailFocused] = useState(false);
     const [isPasswordFocused, setIsPasswordFocused] = useState(false);
@@ -100,6 +101,10 @@ export const SignInScreen = ({navigation})=>{
         }
     }
 
+    const onForgotPress = () => {
+        navigation.push('Recover')
+      }
+
     return(
         <SafeAreaView style={{flex:1}}>
             <View style={{flex:0.8, alignItems:'center'}}>
@@ -140,10 +145,13 @@ export const SignInScreen = ({navigation})=>{
                         </TextInput>
                     </View>
                 </View>
-                <View style={{flex:0.3, paddingTop:5}}>
-                    <TouchableOpacity style={{flex:1, alignItems:'flex-end'}}>
-                            <Text>Forgot Password?</Text>
-                    </TouchableOpacity>
+                <View style={{ flex:0.3, flexDirection: 'row', paddingTop: 5, justifyContent: 'flex-end' }}>
+                <TouchableOpacity
+                    onPress={onForgotPress}>
+                    <Text style={{ fontSize: 15, color: 'gray', textDecorationColor: 'gray', textDecorationLine: 'underline', paddingRight: 10 }}>
+                        Forgot Password ?
+                    </Text>
+                </TouchableOpacity>
                 </View>
 
                 <View style={{flex:1.2, flexDirection:'row', paddingTop:5}}>
@@ -164,21 +172,23 @@ export const SignInScreen = ({navigation})=>{
                     </View>
                 </View>
                 <View style={{flex:1.5, flexDirection:'row', paddingTop:'3%'}}>
-                        <TouchableOpacity style={{flex:1, alignItems:'center', marginHorizontal:'3%', marginVertical:'2%'}}>
-                            <Image source={googleIcon} style={{flex:1, resizeMode:'center'}}></Image>
-                        </TouchableOpacity>
-                        <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
-                            <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
-                        </View>
-                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center', marginHorizontal:'3%', marginVertical:'2%'}}>
-                            <Image source={appleIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
-                        </TouchableOpacity>
-                        <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
-                            <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
-                        </View>
-                        <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center', marginHorizontal:'3%', marginVertical:'2%'}}>
-                            <Image source={facebookIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
-                        </TouchableOpacity>  
+                    {/*
+                    <TouchableOpacity style={{flex:1, alignItems:'center', marginHorizontal:'3%', marginVertical:'2%'}}>
+                        <Image source={googleIcon} style={{flex:1, resizeMode:'center'}}></Image>
+                    </TouchableOpacity>
+                    <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
+                        <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
+                    </View>
+                    <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center', marginHorizontal:'3%', marginVertical:'2%'}}>
+                        <Image source={appleIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
+                    </TouchableOpacity>
+                    <View style={{flex:0.5, flexDirection:'row', alignItems:'center'}}>
+                        <Text style={{flex:1, fontWeight:'bold', textAlign:'center'}}>OR</Text>
+                    </View>
+                    <TouchableOpacity disabled={true} style={{flex:1, alignItems:'center', marginHorizontal:'3%', marginVertical:'2%'}}>
+                        <Image source={facebookIcon} style={{flex:1, resizeMode:'center', opacity:0.2}}></Image>
+                    </TouchableOpacity>  
+                    */}
                 </View>
             </View>
 
