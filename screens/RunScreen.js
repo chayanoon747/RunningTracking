@@ -95,28 +95,7 @@ export const RunScreen = ({navigation}) => {
         return distance;
     };
 
-    // คำนวณระยะทางรวมของเส้นทางที่ผู้ใช้เคลื่อนที่ 
-    /*const calculateTotalDistance = () => {
-        let totalDistance = oldDistance; // เก็บระยะทางรวมเริ่มต้นเท่ากับระยะทางเก่า
-
     
-        // หากมีระยะทางก่อนหน้าและอีกจุดตำแหน่งใหม่เข้ามาและ isTracking เป็น true
-        if (coordinates.length > 1 && isTracking) {
-            const prevCoordinate = coordinates[coordinates.length - 2]; // ดึงจุดตำแหน่งก่อนหน้า
-            const currentCoordinate = coordinates[coordinates.length - 1]; // ดึงจุดตำแหน่งล่าสุด
-    
-            // คำนวณระยะทางใหม่และเพิ่มเข้าไปในระยะทางรวม
-            const newDistance = haversine(
-                prevCoordinate.latitude,
-                prevCoordinate.longitude,
-                currentCoordinate.latitude,
-                currentCoordinate.longitude
-            );
-            totalDistance += newDistance;
-        }
-        
-        return totalDistance; // ระยะทางในหน่วยกิโลเมตร
-    };*/
     const calculateTotalDistance = () => {
         let totalDistance = 0; // เก็บระยะทางรวมของเส้นทาง
         for (let i = 1; i < coordinates.length; i++) {
