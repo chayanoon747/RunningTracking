@@ -7,8 +7,6 @@ export const StatScreen = ()=>{
     const user = useSelector((state)=>state.auths);
     const userUID = user[0].uid
     const [objectUserStats, setObjectUserStats] = useState([]);
-    const [objectUserStatsChanged, setObjectUserStatsChanged] = useState(false);
-   
 
     useEffect(()=>{
         const fetchData = async () => {
@@ -19,22 +17,11 @@ export const StatScreen = ()=>{
                 setObjectUserStats(userStats);
             }else{
                 console.log("User stats no data");
-            }
-            
+            } 
         };
-        
-        // เช็คการเปลี่ยนแปลงใน objectUserStats ก่อนที่จะเรียก fetchData
-        if (objectUserStatsChanged) {
-            fetchData();
-            // อัปเดต objectUserStatsChanged เพื่อหยุดการทำงานซ้ำ
-            setObjectUserStatsChanged(false);
-        }
-    },[objectUserStatsChanged])
 
-    // อัปเดต objectUserStatsChanged เมื่อ objectUserStats เปลี่ยน
-    useEffect(() => {
-        setObjectUserStatsChanged(true);
-    }, [objectUserStats]);
+        fetchData();
+    },[])
 
     const convertTimeStampToDate = (timestamp)=>{
         const date = new Date(timestamp.seconds * 1000); // คูณ 1000 เพื่อเปลี่ยนเวลาเป็นมิลลิวินาที
