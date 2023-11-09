@@ -7,12 +7,13 @@ export const StatScreen = ()=>{
     const user = useSelector((state)=>state.auths);
     const userUID = user[0].uid
     const [objectUserStats, setObjectUserStats] = useState([]);
+    const [objectUserStatsChanged, setObjectUserStatsChanged] = useState(false);
    
 
     useEffect(()=>{
         const fetchData = async () => {
             const arrayUserStats = await fetchUserStats(userUID);
-            console.log(arrayUserStats)
+            
             if(arrayUserStats.length){
                 const userStats = arrayUserStats[0].statistic;
                 setObjectUserStats(userStats);
@@ -22,8 +23,18 @@ export const StatScreen = ()=>{
             
         };
         
-        fetchData();
-    }, [])
+        // เช็คการเปลี่ยนแปลงใน objectUserStats ก่อนที่จะเรียก fetchData
+        if (objectUserStatsChanged) {
+            fetchData();
+            // อัปเดต objectUserStatsChanged เพื่อหยุดการทำงานซ้ำ
+            setObjectUserStatsChanged(false);
+        }
+    },[objectUserStatsChanged])
+
+    // อัปเดต objectUserStatsChanged เมื่อ objectUserStats เปลี่ยน
+    useEffect(() => {
+        setObjectUserStatsChanged(true);
+    }, [objectUserStats]);
 
     const convertTimeStampToDate = (timestamp)=>{
         const date = new Date(timestamp.seconds * 1000); // คูณ 1000 เพื่อเปลี่ยนเวลาเป็นมิลลิวินาที
@@ -66,6 +77,7 @@ export const StatScreen = ()=>{
         const remainingSeconds = seconds % 60;
 
         // สร้างรูปแบบ "นาที:วินาที" ในรูปของสตริง
+        //.padStart(2, '0') เพื่อให้ค่ามีความยาว 2 ตัวอักษร และถ้าค่านั้นมีความยาวน้อยกว่า 2 ตัวอักษร จะเติม '0' ไว้ด้านหน้าเพื่อให้ค่านั้นมีความยาว 2 ตัวอักษรเสมอ
         const formattedTime = `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
 
         return formattedTime;

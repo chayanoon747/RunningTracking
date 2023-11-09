@@ -144,7 +144,7 @@ export const updateStatistics = async (userUID, time, distance, caloriesBurned, 
   }
 };
 
-// ฟังก์ชันสำหรับดึงข้อมูลจาก Firestore
+
 export const fetchUserStats = async (userUID) => {
   try {
     const qry = query(statisticsColl, where('userUID', '==', userUID));
